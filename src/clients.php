@@ -21,6 +21,11 @@ function fetchClientInfo($clients)
 	$errors = []; // Массив для хранения ошибок
 	$client_init = [];
 
+	if (empty($_SESSION['clients_api_keys'])) {
+		// Если массив пуст, инициализируем его
+		$_SESSION['clients_api_keys'] = [];
+	}
+
 	foreach ($clients as $client) {
 		$API_KEY = $client['api'];
 		$API_URL = 'https://api.s1.yadrocrm.ru/tmp';
@@ -40,6 +45,9 @@ function fetchClientInfo($clients)
 			} else {
 				// Сохраняем результат по имени клиента
 				$client_init[$client['name']] = $api;
+
+				// Сохраняем в сессии по имени клиента
+				$_SESSION['clients_api_keys'][$client['name']] = $client['api'];
 
 				// Сохраняем результат по имени клиента
 				$results[$client['name']] = $result['message'];
